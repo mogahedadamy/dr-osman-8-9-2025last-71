@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Heart, Sparkles } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 
 interface SplashScreenProps {
   onComplete: () => void;
@@ -58,21 +58,21 @@ const SplashScreen = ({ onComplete }: SplashScreenProps) => {
           {/* Main Logo Circle */}
           <div 
             className="
-              relative w-24 h-24 md:w-32 md:h-32
-              bg-gradient-to-br from-primary to-primary-soft
+              relative w-32 h-32 md:w-40 md:h-40
               rounded-full flex items-center justify-center
-              shadow-lg border-4 border-white/20
+              shadow-2xl
               animate-bounce-gentle
             "
           >
-            <Heart 
-              className="w-10 h-10 md:w-14 md:h-14 text-white" 
-              fill="currentColor"
+            <img 
+              src="/lovable-uploads/1e1120b6-69dd-4ce1-89bb-55e30b39b4d6.png"
+              alt="Dr. Osman Pregnancy Companion Logo"
+              className="w-full h-full object-contain"
             />
             
             {/* Sparkles */}
             <Sparkles 
-              className="absolute -top-2 -right-2 w-6 h-6 text-accent animate-pulse" 
+              className="absolute -top-3 -right-3 w-8 h-8 text-accent animate-pulse" 
               fill="currentColor"
             />
           </div>
@@ -85,11 +85,11 @@ const SplashScreen = ({ onComplete }: SplashScreenProps) => {
             ${stage >= 1 ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
           `}
         >
-          <h1 className="text-2xl md:text-3xl font-bold text-primary">
+          <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent drop-shadow-lg">
             Dr. Osman
           </h1>
-          <p className="text-lg md:text-xl font-semibold text-secondary">
-            رفيق الحمل الذكي
+          <p className="text-xl md:text-2xl font-bold bg-gradient-to-r from-primary to-pink-600 bg-clip-text text-transparent">
+            Pregnancy Companion
           </p>
           <p className="text-sm text-muted-foreground max-w-xs">
             مرافقك الموثوق في رحلة الأمومة
