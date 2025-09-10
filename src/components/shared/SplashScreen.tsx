@@ -1,0 +1,137 @@
+import { useState, useEffect } from 'react';
+import { Heart, Sparkles } from 'lucide-react';
+
+interface SplashScreenProps {
+  onComplete: () => void;
+}
+
+const SplashScreen = ({ onComplete }: SplashScreenProps) => {
+  const [isVisible, setIsVisible] = useState(true);
+  const [stage, setStage] = useState(0); // 0: fade in, 1: show content, 2: fade out
+
+  useEffect(() => {
+    const timer1 = setTimeout(() => setStage(1), 500); // Start showing content
+    const timer2 = setTimeout(() => setStage(2), 2500); // Start fade out
+    const timer3 = setTimeout(() => {
+      setIsVisible(false);
+      onComplete();
+    }, 3000); // Complete splash
+
+    return () => {
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+      clearTimeout(timer3);
+    };
+  }, [onComplete]);
+
+  if (!isVisible) return null;
+
+  return (
+    <div 
+      className={`
+        fixed inset-0 z-50 flex items-center justify-center
+        bg-gradient-to-br from-primary-light via-background to-secondary-soft
+        transition-opacity duration-500
+        ${stage === 2 ? 'opacity-0' : 'opacity-100'}
+      `}
+    >
+      {/* Background Pattern */}
+      <div className="absolute inset-0 opacity-5">
+        <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-primary rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-24 h-24 bg-secondary rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute top-1/2 right-1/3 w-16 h-16 bg-accent rounded-full blur-2xl animate-pulse delay-500"></div>
+      </div>
+
+      {/* Main Logo Content */}
+      <div 
+        className={`
+          relative flex flex-col items-center justify-center text-center
+          transform transition-all duration-1000 ease-out
+          ${stage >= 1 ? 'scale-100 opacity-100' : 'scale-75 opacity-0'}
+        `}
+      >
+        {/* Logo Container */}
+        <div className="relative mb-6">
+          {/* Glow Effect */}
+          <div className="absolute inset-0 bg-primary/20 rounded-full blur-xl scale-150 animate-pulse"></div>
+          
+          {/* Main Logo Circle */}
+          <div 
+            className="
+              relative w-24 h-24 md:w-32 md:h-32
+              bg-gradient-to-br from-primary to-primary-soft
+              rounded-full flex items-center justify-center
+              shadow-lg border-4 border-white/20
+              animate-bounce-gentle
+            "
+          >
+            <Heart 
+              className="w-10 h-10 md:w-14 md:h-14 text-white" 
+              fill="currentColor"
+            />
+            
+            {/* Sparkles */}
+            <Sparkles 
+              className="absolute -top-2 -right-2 w-6 h-6 text-accent animate-pulse" 
+              fill="currentColor"
+            />
+          </div>
+        </div>
+
+        {/* App Title */}
+        <div 
+          className={`
+            space-y-2 transform transition-all duration-700 delay-300
+            ${stage >= 1 ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
+          `}
+        >
+          <h1 className="text-2xl md:text-3xl font-bold text-primary">
+            Dr. Osman
+          </h1>
+          <p className="text-lg md:text-xl font-semibold text-secondary">
+            رفيق الحمل الذكي
+          </p>
+          <p className="text-sm text-muted-foreground max-w-xs">
+            مرافقك الموثوق في رحلة الأمومة
+          </p>
+        </div>
+
+        {/* Loading Animation */}
+        <div 
+          className={`
+            mt-8 flex space-x-1 space-x-reverse transform transition-all duration-500 delay-700
+            ${stage >= 1 ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
+          `}
+        >
+          {[0, 1, 2].map((i) => (
+            <div
+              key={i}
+              className={`
+                w-2 h-2 bg-primary rounded-full animate-pulse
+              `}
+              style={{
+                animationDelay: `${i * 0.2}s`,
+                animationDuration: '1s'
+              }}
+            ></div>
+          ))}
+        </div>
+      </div>
+
+      {/* Bottom Text */}
+      <div 
+        className={`
+          absolute bottom-8 left-0 right-0 text-center
+          transform transition-all duration-500 delay-1000
+          ${stage >= 1 ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
+        `}
+      >
+        <p className="text-xs text-muted-foreground">
+          مدعوم بالذكاء الاصطناعي
+        </p>
+      </div>
+    </div>
+  );
+};
+
+export default SplashScreen;

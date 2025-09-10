@@ -2,8 +2,10 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useState } from "react";
 import AppInitializer from "@/components/shared/AppInitializer";
 import ScrollToTop from "@/components/shared/ScrollToTop";
+import SplashScreen from "@/components/shared/SplashScreen";
 import MedicalDisclaimer from "@/components/shared/MedicalDisclaimer";
 import ProductionBuildOptimizations from "@/components/shared/ProductionBuildOptimizations";
 import GooglePlayOptimizations from "@/components/shared/GooglePlayOptimizations";
@@ -67,6 +69,12 @@ const queryClient = new QueryClient({
 });
 
 const App = () => {
+  const [showSplash, setShowSplash] = useState(true);
+
+  if (showSplash) {
+    return <SplashScreen onComplete={() => setShowSplash(false)} />;
+  }
+
   return (
     <QueryClientProvider client={queryClient}>
       <SettingsProvider>
