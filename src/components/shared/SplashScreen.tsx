@@ -8,21 +8,36 @@ interface SplashScreenProps {
 const SplashScreen = ({ onComplete }: SplashScreenProps) => {
   const [isVisible, setIsVisible] = useState(true);
   const [stage, setStage] = useState(0); // 0: fade in, 1: show content, 2: fade out
+  const [logoLoaded, setLogoLoaded] = useState(false);
+  const [animationsComplete, setAnimationsComplete] = useState(false);
 
   useEffect(() => {
-    const timer1 = setTimeout(() => setStage(1), 500); // Start showing content
-    const timer2 = setTimeout(() => setStage(2), 2500); // Start fade out
-    const timer3 = setTimeout(() => {
-      setIsVisible(false);
-      onComplete();
-    }, 3000); // Complete splash
-
-    return () => {
-      clearTimeout(timer1);
-      clearTimeout(timer2);
-      clearTimeout(timer3);
+    const timer1 = setTimeout(() => setStage(1), 800); // Start showing content
+    
+    // Wait for logo to load and animations to complete
+    const checkCompletion = () => {
+      if (logoLoaded && animationsComplete) {
+        // Wait additional time to let user see the full logo
+        setTimeout(() => setStage(2), 1500); // Start fade out
+        setTimeout(() => {
+          setIsVisible(false);
+          onComplete();
+        }, 2000); // Complete splash
+      }
     };
-  }, [onComplete]);
+
+    if (stage === 1) {
+      // Mark animations as complete after all animations finish
+      const animationTimer = setTimeout(() => {
+        setAnimationsComplete(true);
+        checkCompletion();
+      }, 2500); // Wait for all animations to complete
+
+      return () => clearTimeout(animationTimer);
+    }
+
+    return () => clearTimeout(timer1);
+  }, [onComplete, logoLoaded, animationsComplete, stage]);
 
   if (!isVisible) return null;
 
@@ -68,6 +83,8 @@ const SplashScreen = ({ onComplete }: SplashScreenProps) => {
               src="/lovable-uploads/1e1120b6-69dd-4ce1-89bb-55e30b39b4d6.png"
               alt="Dr. Osman Pregnancy Companion Logo"
               className="w-full h-full object-contain"
+              onLoad={() => setLogoLoaded(true)}
+              onError={() => setLogoLoaded(true)} // Continue even if image fails to load
             />
             
             {/* Sparkles */}
