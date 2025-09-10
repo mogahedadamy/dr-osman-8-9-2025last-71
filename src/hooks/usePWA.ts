@@ -1,0 +1,97 @@
+import { useState, useEffect } from 'react';
+
+interface BeforeInstallPromptEvent extends Event {
+  prompt(): Promise<void>;
+  userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
+}
+
+export const usePWA = () => {
+  const [isInstallable, setIsInstallable] = useState(false);
+  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+  const [isInstalled, setIsInstalled] = useState(false);
+  const [isIOS, setIsIOS] = useState(false);
+
+  useEffect(() => {
+    // Check if running as PWA
+    const isPWA = window.matchMedia && window.matchMedia('(display-mode: standalone)').matches;
+    setIsInstalled(isPWA);
+
+    // Check if it's iOS
+    const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    setIsIOS(iOS);
+
+    // Listen for beforeinstallprompt event
+    const handleBeforeInstallPrompt = (e: Event) => {
+      e.preventDefault();
+      setDeferredPrompt(e as BeforeInstallPromptEvent);
+      setIsInstallable(true);
+    };
+
+    // Listen for app installed event
+    const handleAppInstalled = () => {
+      setIsInstalled(true);
+      setIsInstallable(false);
+      setDeferredPrompt(null);
+    };
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    window.addEventListener('appinstalled', handleAppInstalled);
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+      window.removeEventListener('appinstalled', handleAppInstalled);
+    };
+  }, []);
+
+  const installApp = async () => {
+    if (!deferredPrompt) return false;
+
+    try {
+      await deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      
+      if (outcome === 'accepted') {
+        setIsInstalled(true);
+      }
+      
+      setDeferredPrompt(null);
+      setIsInstallable(false);
+      
+      return outcome === 'accepted';
+    } catch (error) {
+      console.error('Error installing PWA:', error);
+      return false;
+    }
+  };
+
+  const getInstallInstructions = () => {
+    if (isIOS) {
+      return {
+        title: 'تثبيت على iOS',
+        steps: [
+          'اضغط على زر المشاركة في متصفح Safari',
+          'اختر "إضافة إلى الشاشة الرئيسية"',
+          'اضغط على "إضافة" للتأكيد'
+        ]
+      };
+    }
+    
+    return {
+      title: 'تثبيت التطبيق',
+      steps: [
+        'اضغط على زر "تثبيت" عند ظهوره',
+        'أو من قائمة المتصفح اختر "تثبيت التطبيق"',
+        'اتبع التعليمات لإكمال التثبيت'
+      ]
+    };
+  };
+
+  return {
+    isInstallable,
+    isInstalled,
+    isIOS,
+    installApp,
+    getInstallInstructions,
+    canInstall: isInstallable || isIOS
+  };
+};
