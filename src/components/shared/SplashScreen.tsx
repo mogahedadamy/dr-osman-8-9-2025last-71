@@ -50,11 +50,9 @@ const SplashScreen = ({ onComplete }: SplashScreenProps) => {
         ${stage === 2 ? 'opacity-0' : 'opacity-100'}
       `}
     >
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-5">
-        <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-primary rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-24 h-24 bg-secondary rounded-full blur-3xl animate-pulse delay-1000"></div>
-        <div className="absolute top-1/2 right-1/3 w-16 h-16 bg-accent rounded-full blur-2xl animate-pulse delay-500"></div>
+      {/* Minimal Background */}
+      <div className="absolute inset-0 opacity-10">
+        <div className="absolute top-1/3 left-1/3 w-16 h-16 bg-primary rounded-full blur-2xl animate-pulse delay-1000"></div>
       </div>
 
       {/* Main Logo Content */}
@@ -66,17 +64,12 @@ const SplashScreen = ({ onComplete }: SplashScreenProps) => {
         `}
       >
         {/* Logo Container */}
-        <div className="relative mb-6">
-          {/* Glow Effect */}
-          <div className="absolute inset-0 bg-primary/20 rounded-full blur-xl scale-150 animate-pulse"></div>
-          
-          {/* Main Logo Circle */}
+        <div className="relative mb-8">
+          {/* Main Logo */}
           <div 
             className="
-              relative w-32 h-32 md:w-40 md:h-40
-              rounded-full flex items-center justify-center
-              shadow-2xl
-              animate-bounce-gentle
+              relative w-40 h-40 md:w-48 md:h-48
+              flex items-center justify-center
             "
           >
             <img 
@@ -86,29 +79,17 @@ const SplashScreen = ({ onComplete }: SplashScreenProps) => {
               onLoad={() => setLogoLoaded(true)}
               onError={() => setLogoLoaded(true)} // Continue even if image fails to load
             />
-            
-            {/* Sparkles */}
-            <Sparkles 
-              className="absolute -top-3 -right-3 w-8 h-8 text-accent animate-pulse" 
-              fill="currentColor"
-            />
           </div>
         </div>
 
         {/* App Title */}
         <div 
           className={`
-            space-y-2 transform transition-all duration-700 delay-300
+            space-y-3 transform transition-all duration-700 delay-300
             ${stage >= 1 ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
           `}
         >
-          <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent drop-shadow-lg">
-            Dr. Osman
-          </h1>
-          <p className="text-xl md:text-2xl font-bold bg-gradient-to-r from-primary to-pink-600 bg-clip-text text-transparent">
-            Pregnancy Companion
-          </p>
-          <p className="text-sm text-muted-foreground max-w-xs">
+          <p className="text-sm text-muted-foreground">
             مرافقك الموثوق في رحلة الأمومة
           </p>
         </div>
