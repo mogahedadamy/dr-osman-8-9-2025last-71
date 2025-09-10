@@ -32,7 +32,7 @@ const Index = () => {
               <TouchFeedback>
                 <div className="w-12 h-12 rounded-full flex items-center justify-center overflow-hidden">
                   <img 
-                    src="/lovable-uploads/1e1120b6-69dd-4ce1-89bb-55e30b39b4d6.png"
+                    src="/logo-dr-osman.png"
                     alt="Dr. Osman Logo"
                     className="w-full h-full object-contain"
                   />

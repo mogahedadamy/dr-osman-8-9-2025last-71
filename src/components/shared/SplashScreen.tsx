@@ -73,7 +73,7 @@ const SplashScreen = ({ onComplete }: SplashScreenProps) => {
             "
           >
             <img 
-              src="/lovable-uploads/1e1120b6-69dd-4ce1-89bb-55e30b39b4d6.png"
+              src="/logo-dr-osman.png"
               alt="Dr. Osman Pregnancy Companion Logo"
               className="w-full h-full object-contain"
               onLoad={() => setLogoLoaded(true)}
